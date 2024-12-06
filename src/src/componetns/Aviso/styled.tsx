@@ -29,7 +29,7 @@ export const InputBase = styled.input`
 
 export const ModalContainer = styled.div`
     background: white;
-    padding: 20px 20px 10px 20px;
+    padding: 40px 20px 40px 20px;
     border-radius: 8px;
     max-width: 500px;
     width: 100%;

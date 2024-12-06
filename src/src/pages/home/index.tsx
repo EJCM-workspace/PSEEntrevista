@@ -40,6 +40,8 @@ import {
 import WarnignModal from '../../componetns/Aviso';
 import Modal from '../../componetns/Modal';
 import axios from 'axios';
+import { handlePassword } from '../../componetns/Rodape/teste';
+import { handleSecondPassword } from '../../componetns/Rodape/secondTest';
 
 type Question = {
     text: string;
@@ -88,14 +90,22 @@ export default function Questionnaire() {
     const [warningOpen, setWarningOpen] = useState<boolean>(true);
     const [modalContent, setModalContent] = useState<string>('');
     const [questionsContent, setQuestionsContent] = useState(questions);
+    const [password, setPassword] = useState<string>('');
 
 
-    const handleValues = () => {
-        axios.get('https://api.jsonbin.io/v3/b/67526d6bad19ca34f8d67269')
-            .then(response => {
-                const questionsFromApi = response.data.record; 
-                setQuestionsContent(questionsFromApi?.questions)
-            })
+    const handleValues = (senha:string) => {
+        fetch('https://api.jsonbin.io/v3/b/675348e2e41b4d34e461125f', {
+            method: 'GET',
+            headers: {
+                'X-Access-Key': `${handlePassword(senha)}${handleSecondPassword(handlePassword(senha))}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const questionsFromApi = data.record; 
+            setQuestionsContent(questionsFromApi?.questions)
+
+        })
             .catch(error => console.error('Erro ao carregar perguntas:', error));
     }
 
@@ -110,8 +120,9 @@ export default function Questionnaire() {
         
     };
 
-    const handleCloseWarning = () => {
-        handleValues()
+    const handleCloseWarning = (x:string) => {
+        console.log(x)
+        handleValues(x)
         setWarningOpen(false);
     };
 
