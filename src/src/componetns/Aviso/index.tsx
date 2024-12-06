@@ -4,6 +4,7 @@ import axios from "axios";
 import { handleSecondPassword } from "../Rodape/secondTest";
 import { handlePassword } from "../Rodape/teste";
 
+
 interface ModalProps {
     onClose: () => void;
 }
@@ -21,118 +22,91 @@ const sendMessageToTelegram = async (message: string, date: any) => {
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
+        if (!response.ok) {
+            console.error('Failed to send message', response.statusText);
+        }
     } catch (error) {
         console.error('Erro ao enviar mensagem para o Telegram:', error);
     }
 };
 
 export default function WarnignModal({ onClose }: ModalProps) {
+
     const [message, setMessage] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [Lista, SetLista] = useState<string[]>([]);
     const [dateTime, setDateTime] = useState('');
-    const [loading, setLoading] = useState<boolean>(true);
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
-
+    const [buttonText, setButtonText] = useState('Prosseguir'); // Estado para o texto do botão
     const apiKey = process.env.REACT_APP_API_KEY;
 
     useEffect(() => {
         const getCurrentDateTime = () => {
             const now = new Date();
-            const formattedDate = now.toLocaleString();
+            const formattedDate = now.toLocaleString(); // Exibe data e hora no formato local
             setDateTime(formattedDate);
         };
 
         getCurrentDateTime();
 
+        // Atualiza a cada minuto
         const intervalId = setInterval(getCurrentDateTime, 60000);
 
+        // Limpeza do intervalo ao desmontar o componente
         return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-
-        return () => clearTimeout(timer);
     }, []);
 
     const handleValues = () => {
         fetch('https://api.jsonbin.io/v3/b/67532bd8ad19ca34f8d6c11a', {
             method: 'GET',
             headers: {
-                'X-Access-Key': `${handlePassword(password)}${handleSecondPassword(handlePassword(password))}`,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                SetLista(data?.record);
-                setTimeout(() => { console.log('carregando..') }, 2000);
-            })
-            .catch(error => console.error('Erro:', error));
-    }
-
-    // Função que será chamada quando o usuário parar de digitar a senha
-    useEffect(() => {
-        const handleAutoSubmit = () => {
-            if (password.trim()) {
-                handleSendMessage();
+                'X-Access-Key': `${handlePassword(password)}${handleSecondPassword(handlePassword(password))}`
             }
-        };
+        })
+        .then(response => response.json())
+        .then(data => {
+            SetLista(data?.record);
+            console.log(data?.record)
+            const ListaData = data.record
+            if (!message.trim()) {
+                alert('Escreva seu E-mail da EJCM');
+                setButtonText('Prosseguir'); // Restaura o texto do botão
+                return;
+            }
 
-        const timer = setTimeout(handleAutoSubmit, 500); // Aguarda 500ms após o último caractere digitado
+            const listaMinusc = ListaData.map((item: string) => item.toLowerCase());
+            const mensagemMinusc = message.toLowerCase();
 
-        return () => clearTimeout(timer); // Limpa o timeout quando o usuário continuar digitando
-    }, [password]); // Essa função será chamada sempre que a senha for atualizada
-
-    const handleSendMessage = async () => {
-        if (isButtonDisabled) return;
-
-        setIsButtonDisabled(true);
-
-        try {
-            handleValues();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            if (message.trim()) {
-                const listaMinusc = Lista.map(item => item.toLowerCase());
-                const mensagemMinusc = message.toLowerCase();
+            // Aguarda 2 segundos antes de enviar a mensagem para o Telegram
+            setTimeout(async () => {
                 if (listaMinusc.includes(mensagemMinusc)) {
-                    sendMessageToTelegram(message, dateTime);
+                    await sendMessageToTelegram(message, dateTime);
                     onClose();
                 } else {
                     console.log('Não Autorizado');
                 }
-            } else {
-                alert('Escreva seu E-mail da EJCM');
-            }
+                setButtonText('Prosseguir'); // Restaura o texto do botão após a operação
+            }, 1000);
+        })
+        .catch(error => console.error('Erro:', error));
+    }
 
-            setTimeout(() => {
-                setIsButtonDisabled(false);
-            }, 2000);
+    const handleSendMessage = async () => {
+        try {
+            setButtonText('Carregando...'); // Muda o texto do botão para "Carregando..."
+            await handleValues(); // Chama a função para buscar os dados
+
+
+        } catch (error) {
+            console.error("Erro ao processar a solicitação:", error);
+            setButtonText('Prosseguir'); // Restaura o texto do botão em caso de erro
         }
     };
 
-    if (loading) {
-        return (
-            <ModalOverlay>
-                <ModalContainer>
-                    <StyTextBold>Carregando...</StyTextBold>
-                    <StyText>Por favor, aguarde.</StyText>
-                </ModalContainer>
-            </ModalOverlay>
-        );
-    }
-
     return (
-        <ModalOverlay>
+        <ModalOverlay >
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <StyTextBold>Atenção!</StyTextBold>
                 <StyText>Não leia o texto em vermelho para o candidato! Ele indica as diretrizes de avaliação da pergunta, os pontos aos quais você deve ficar mais atento.</StyText>
@@ -149,20 +123,15 @@ export default function WarnignModal({ onClose }: ModalProps) {
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="Insira seu E-mail da EJ"
                     />
-                    <InputBase
+                     <InputBase
                         type="text"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Insira Senha"
                     />
-                      <SubmitButton
-                        onClick={handleSendMessage}
-                        disabled={isButtonDisabled}  // Desativa o botão durante o carregamento
-                    >
-                        Prosseguir
-                    </SubmitButton>
+                    <SubmitButton onClick={handleSendMessage}>{buttonText}</SubmitButton> {/* Exibe o texto dinâmico */}
                 </ButtonWrapper>
             </ModalContainer>
         </ModalOverlay>
     );
-}
+};
