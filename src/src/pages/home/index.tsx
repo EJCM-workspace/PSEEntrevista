@@ -357,6 +357,7 @@ export default function Questionnaire() {
                 ))}
 
                 <ImportText>Aviso Final:<br />
+                    • Falar pro candidato que, caso ele seja aprovado, o Treinamento Técnico da EJCM começará em 13/01/2025<br />
                     • Os resultados da entrevista saem até dia 20/12/2025 (sexta-feira)<br />
                     • Lembrar de sempre olhar o spam<br />
                     • Perguntar se o candidato tem alguma dúvida<br />

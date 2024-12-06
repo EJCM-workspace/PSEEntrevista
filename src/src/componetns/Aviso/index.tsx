@@ -116,6 +116,7 @@ export default function WarnignModal({ onClose }: ModalProps) {
                 <StyText>Se o entrevistado for muito vago e superficial, pergunte se ele pode explicar um pouco melhor. Caso continue sendo vago, anote a dificuldade no desenvolvimento, e então siga para a próxima pergunta.</StyText>
                 <StyText>Não fuja do assunto (falar sobre filmes, animes, jogos, etc). Seja educado e gentil mas permaneça sério e profissional, para manter a avaliação focada no interesse em entrar na EJCM, não por você ser legal.</StyText>
                 <StyText>Seja crítico e incisivo nas perguntas sobre D&I, resuma o que foi dito pelo candidato na planilha de avaliação e fique atento se o candidato é tolerante e está alinhado com os nossos valores (descreva se foi superficial, impressões, etc).</StyText>
+                <StyText>Se um candidato responder antecipadamente a uma pergunta ainda não feita, você pode optar por pular essa pergunta. Por exemplo, se durante a resposta da pergunta 1 o candidato abordar o tema da pergunta 3, esta pode ser descartada, já que o assunto já foi abordado</StyText>
                 <ButtonWrapper>
                     <InputBase
                         type="text"
