@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/PSEEntrevista/static/css/main.50b03f2e.css",
+    "main.js": "/PSEEntrevista/static/js/main.2d29054e.js",
+    "static/js/453.8ab44547.chunk.js": "/PSEEntrevista/static/js/453.8ab44547.chunk.js",
+    "static/js/213.627943c0.chunk.js": "/PSEEntrevista/static/js/213.627943c0.chunk.js",
+    "static/js/732.be0d18e9.chunk.js": "/PSEEntrevista/static/js/732.be0d18e9.chunk.js",
+    "static/media/BG.svg": "/PSEEntrevista/static/media/BG.ebb8cf3b0c84f7f6a499961e449ef946.svg",
+    "static/media/TopBG.svg": "/PSEEntrevista/static/media/TopBG.95aab448ebc1b8d21e2e101adf58d8de.svg",
+    "static/media/Logo.svg": "/PSEEntrevista/static/media/Logo.80b79ceced1b0fdbde77b502d1f9fbc4.svg",
+    "static/media/poppins-latin-400-normal.woff": "/PSEEntrevista/static/media/poppins-latin-400-normal.1458587c0aa7cd06b82b.woff",
+    "static/media/poppins-latin-400-normal.woff2": "/PSEEntrevista/static/media/poppins-latin-400-normal.405055dd680fa1dcdfa2.woff2",
+    "static/media/poppins-latin-ext-400-normal.woff": "/PSEEntrevista/static/media/poppins-latin-ext-400-normal.cf7e1ed83eb19f7b1ea6.woff",
+    "static/media/poppins-latin-ext-400-normal.woff2": "/PSEEntrevista/static/media/poppins-latin-ext-400-normal.6f94f40f848d79872444.woff2",
+    "index.html": "/PSEEntrevista/index.html",
+    "main.50b03f2e.css.map": "/PSEEntrevista/static/css/main.50b03f2e.css.map",
+    "main.2d29054e.js.map": "/PSEEntrevista/static/js/main.2d29054e.js.map",
+    "453.8ab44547.chunk.js.map": "/PSEEntrevista/static/js/453.8ab44547.chunk.js.map",
+    "213.627943c0.chunk.js.map": "/PSEEntrevista/static/js/213.627943c0.chunk.js.map",
+    "732.be0d18e9.chunk.js.map": "/PSEEntrevista/static/js/732.be0d18e9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.50b03f2e.css",
+    "static/js/main.2d29054e.js"
+  ]
+}
