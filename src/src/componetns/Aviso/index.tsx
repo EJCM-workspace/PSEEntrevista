@@ -14,7 +14,23 @@ const CHAT_ID = '-4553290412'; // Substitua pelo seu chat_id ou ID de grupo
 
 const sendMessageToTelegram = async (message: string, date: any) => {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-   
+    const data = {
+        chat_id: CHAT_ID,
+        text: `${message} Acessou o Forms agr ${date}`,
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            console.error('Failed to send message', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro ao enviar mensagem para o Telegram:', error);
+    }
 };
 
 export default function WarnignModal({ onClose }: ModalProps) {
