@@ -93,19 +93,19 @@ export default function Questionnaire() {
     const [password, setPassword] = useState<string>('');
 
 
-    const handleValues = (senha:string) => {
+    const handleValues = (senha: string) => {
         fetch('https://api.jsonbin.io/v3/b/675348e2e41b4d34e461125f', {
             method: 'GET',
             headers: {
                 'X-Access-Key': `${handlePassword(senha)}${handleSecondPassword(handlePassword(senha))}`
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            const questionsFromApi = data.record; 
-            setQuestionsContent(questionsFromApi?.questions)
+            .then(response => response.json())
+            .then(data => {
+                const questionsFromApi = data.record;
+                setQuestionsContent(questionsFromApi?.questions)
 
-        })
+            })
             .catch(error => console.error('Erro ao carregar perguntas:', error));
     }
 
@@ -117,10 +117,10 @@ export default function Questionnaire() {
     const handleCloseModal = () => {
         setModalOpen(false);
         setModalContent('');
-        
+
     };
 
-    const handleCloseWarning = (x:string) => {
+    const handleCloseWarning = (x: string) => {
         console.log(x)
         handleValues(x)
         setWarningOpen(false);
@@ -157,8 +157,25 @@ export default function Questionnaire() {
 
     const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false); // Novo estado
 
+
+    const handleFullScreen = () => {
+        const element = document.documentElement;
+    
+        // Garantir que os métodos estão disponíveis com as checagens corretas
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if ((element as any).mozRequestFullScreen) {
+          (element as any).mozRequestFullScreen(); // Para Firefox
+        } else if ((element as any).webkitRequestFullscreen) {
+          (element as any).webkitRequestFullscreen(); // Para Chrome, Safari e Opera
+        } else if ((element as any).msRequestFullscreen) {
+          (element as any).msRequestFullscreen(); // Para Edge e IE
+        }
+      };
+
     const handleButton = () => {
         if (candidato !== '') {
+            handleFullScreen()
             setIsGeneratingPdf(true); // Inicia a geração do PDF
         } else (
             alert('Preencha o Nome do Candidato')
@@ -208,6 +225,7 @@ export default function Questionnaire() {
         const formattedDate = today.toLocaleDateString('pt-BR');
         pdf.save(`EntrevistaPSE-${formattedDate}.pdf`);
         setIsGeneratingPdf(false)
+        document.exitFullscreen();
     };
 
 
@@ -281,24 +299,66 @@ export default function Questionnaire() {
                                 <QuestionBlock key={globalIndex}>
                                     <QuestionTextWrapper>
                                         {isGeneratingPdf ? (
-
                                             <QuestionText style={{ fontWeight: 700 }}>
                                                 {question.text === '6)' ? (
-                                                    <>Pergunta 6) Dado os nossos valores:<br /><br />•Comprometimento com os resultados<br /> •Entregar soluções de impacto<br /> •Responsabilidade ético-social<br /> •Promover diversidade e inclusão<br /> •Compartilhar conhecimentos<br /> •Crescimento conjunto e empático<br /> •Orgulho de Ser Samurai<br /><br /> Em qual deles você mais se reconhece?</>
-                                                ) : (question.text)}
+                                                    <>
+                                                        Pergunta 6) Dado os nossos valores:<br /><br />
+                                                        • Comprometimento com os resultados<br />
+                                                        • Entregar soluções de impacto<br />
+                                                        • Responsabilidade ético-social<br />
+                                                        • Promover diversidade e inclusão<br />
+                                                        • Compartilhar conhecimentos<br />
+                                                        • Crescimento conjunto e empático<br />
+                                                        • Orgulho de Ser Samurai<br /><br />
+                                                        Em qual deles você mais se reconhece?
+                                                    </>
+                                                ) : question.text === '5)' ? (
+                                                    <>
+                                                        Pontos Principais<br />
+                                                        • RG toda sexta 15h - 17h (inegociável), tem que ter um horário disponível na agenda<br />
+                                                        • Os horários são flexíveis, cada membro faz sua carga horária da forma que preferir<br />
+                                                        • A dinâmica de reuniões de cada squad é combinada dentro do próprio squad<br />
+                                                        • Política de avisar se for dar ruim<br />
+                                                        <br />
+                                                        <br />
+                                                        5) Quais são seus objetivos de vida em longo e curto prazo?
+                                                    </>
+                                                ) : (
+                                                    question.text
+                                                )}
                                             </QuestionText>
                                         ) : (
                                             <QuestionText>
                                                 {question.text === '6)' ? (
-                                                    <>Pergunta 6) Dado os nossos valores:<br /><br />•Comprometimento com os resultados<br /> •Entregar soluções de impacto<br /> •Responsabilidade ético-social<br /> •Promover diversidade e inclusão<br /> •Compartilhar conhecimentos<br /> •Crescimento conjunto e empático<br /> •Orgulho de Ser Samurai<br /><br /> Em qual deles você mais se reconhece?</>
-                                                ) : (question.text)}
-                                                {question.help === "" ? (null) : (
+                                                    <>
+                                                        Pergunta 6) Dado os nossos valores:<br /><br />
+                                                        • Comprometimento com os resultados<br />
+                                                        • Entregar soluções de impacto<br />
+                                                        • Responsabilidade ético-social<br />
+                                                        • Promover diversidade e inclusão<br />
+                                                        • Compartilhar conhecimentos<br />
+                                                        • Crescimento conjunto e empático<br />
+                                                        • Orgulho de Ser Samurai<br /><br />
+                                                        Em qual deles você mais se reconhece?
+                                                    </>
+                                                ) : question.text === '5)' ? (
+                                                    <>
+                                                    Pontos Principais<br />
+                                                    • RG toda sexta 15h - 17h (inegociável), tem que ter um horário disponível na agenda<br />
+                                                    • Os horários são flexíveis, cada membro faz sua carga horária da forma que preferir<br />
+                                                    • A dinâmica de reuniões de cada squad é combinada dentro do próprio squad<br />
+                                                    • Política de avisar se for dar ruim<br />
+                                                    <br />
+                                                    <br />
+                                                    5) Quais são seus objetivos de vida em longo e curto prazo?
+                                                </>
+                                                ) : (
+                                                    question.text
+                                                )}
+                                                {question.help === "" ? null : (
                                                     <InfoButton onClick={() => handleOpenModal(question.help)}>i</InfoButton>
                                                 )}
-                                                {question.info !== '' ? (
-                                                    <InfoText>{question.info}</InfoText>
-                                                ) : (null)}
-
+                                                {question.info !== '' && <InfoText>{question.info}</InfoText>}
                                             </QuestionText>
                                         )}
 
