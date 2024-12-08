@@ -92,6 +92,58 @@ export default function Questionnaire() {
     const [questionsContent, setQuestionsContent] = useState(questions);
     const [password, setPassword] = useState<string>('');
 
+    useEffect(() => {
+        const storedCandidato = localStorage.getItem('candidato');
+        const storedEntrevistador = localStorage.getItem('entrevistador');
+        const storedObservador = localStorage.getItem('observador');
+        const storedResponses = questions.map((_, index) => localStorage.getItem(`response_${index}`) || '');
+        const storedSubResponses = questions.map((_, index) => {
+            return (localStorage.getItem(`sub_response_${index}_0`) || '').split(';');
+        });
+    
+        if (storedCandidato) setUserName(storedCandidato);
+        if (storedEntrevistador) setEntrevistador(storedEntrevistador);
+        if (storedObservador) setObservador(storedObservador);
+        setResponses(storedResponses);
+        setSubResponses(storedSubResponses);
+    }, []);
+    
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        setUserName(name);
+        localStorage.setItem('candidato', name);
+    };
+    
+    const handleEntrevistadorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        setEntrevistador(name);
+        localStorage.setItem('entrevistador', name);
+    };
+    
+    const handleObservadorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        setObservador(name);
+        localStorage.setItem('observador', name);
+    };
+    
+    const handleChange = (questionIndex: number, value: string) => {
+        const updatedResponses = [...responses];
+        updatedResponses[questionIndex] = value;
+        setResponses(updatedResponses);
+        localStorage.setItem(`response_${questionIndex}`, value);
+    };
+    
+    const handleSubChange = (questionIndex: number, subIndex: number, value: string) => {
+        setSubResponses(prevResponses => {
+            const updatedResponses = [...prevResponses];
+            const updatedSubQuestions = [...(updatedResponses[questionIndex] || [])];
+            updatedSubQuestions[subIndex] = value;
+            updatedResponses[questionIndex] = updatedSubQuestions;
+            localStorage.setItem(`sub_response_${questionIndex}_${subIndex}`, value);
+            return updatedResponses;
+        });
+    };
+    
 
     const handleValues = (senha: string) => {
         fetch('https://api.jsonbin.io/v3/b/675348e2e41b4d34e461125f', {
@@ -126,31 +178,7 @@ export default function Questionnaire() {
         setWarningOpen(false);
     };
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserName(e.target.value);
-    };
-    const handleEntrevistadorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEntrevistador(e.target.value);
-    };
-    const handleObservadorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setObservador(e.target.value);
-    };
-
-    const handleChange = (questionIndex: number, value: string) => {
-        const updatedResponses = [...responses];
-        updatedResponses[questionIndex] = value;
-        setResponses(updatedResponses);
-    };
-
-    const handleSubChange = (questionIndex: number, subIndex: number, value: string) => {
-        setSubResponses(prevResponses => {
-            const updatedResponses = [...prevResponses];
-            const updatedSubQuestions = [...(updatedResponses[questionIndex] || [])];
-            updatedSubQuestions[subIndex] = value;
-            updatedResponses[questionIndex] = updatedSubQuestions;
-            return updatedResponses;
-        });
-    };
+  
 
     const groupedQuestions = groupQuestionsBySection(questionsContent);
     let globalQuestionIndex = 0; // Variável para controlar o índice global

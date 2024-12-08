@@ -67,8 +67,9 @@ export default function WarnignModal({ onClose }: ModalProps) {
         })
         .then(response => response.json())
         .then(data => {
+            if(data){
             SetLista(data?.record);
-            console.log(data?.record)
+            console.log( 'X',data?.record)
             const ListaData = data.record
             if (!message.trim()) {
                 alert('Escreva seu E-mail da EJCM');
@@ -88,7 +89,11 @@ export default function WarnignModal({ onClose }: ModalProps) {
                     console.log('Não Autorizado');
                 }
                 setButtonText('Prosseguir'); // Restaura o texto do botão após a operação
-            }, 1000);
+            }, 1000);}
+            else{
+                setButtonText('Prosseguir');
+                alert('Senha Incorreta.')
+            }
         })
         .catch(error => console.error('Erro:', error));
     }
