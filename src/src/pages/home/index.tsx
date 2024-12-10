@@ -178,8 +178,6 @@ export default function Questionnaire() {
         setWarningOpen(false);
     };
 
-  
-
     const groupedQuestions = groupQuestionsBySection(questionsContent);
     let globalQuestionIndex = 0; // Variável para controlar o índice global
 
@@ -205,6 +203,12 @@ export default function Questionnaire() {
         if (candidato !== '') {
             handleFullScreen()
             setIsGeneratingPdf(true); // Inicia a geração do PDF
+            localStorage.clear(); // Limpa todos os itens do localStorage
+            setUserName(''); // Limpa o estado do nome do candidato
+            setEntrevistador(''); // Limpa o estado do entrevistador
+            setObservador(''); // Limpa o estado do observador
+            setResponses([]); // Limpa as respostas
+            setSubResponses([]); // Limpa as sub-respostas
         } else (
             alert('Preencha o Nome do Candidato')
         )
