@@ -199,16 +199,13 @@ export default function Questionnaire() {
         }
       };
 
+    
+
     const handleButton = () => {
         if (candidato !== '') {
             handleFullScreen()
             setIsGeneratingPdf(true); // Inicia a geração do PDF
-            localStorage.clear(); // Limpa todos os itens do localStorage
-            setUserName(''); // Limpa o estado do nome do candidato
-            setEntrevistador(''); // Limpa o estado do entrevistador
-            setObservador(''); // Limpa o estado do observador
-            setResponses([]); // Limpa as respostas
-            setSubResponses([]); // Limpa as sub-respostas
+
         } else (
             alert('Preencha o Nome do Candidato')
         )
@@ -258,6 +255,7 @@ export default function Questionnaire() {
         pdf.save(`EntrevistaPSE-${formattedDate}.pdf`);
         setIsGeneratingPdf(false)
         document.exitFullscreen();
+        localStorage.clear(); // Limpa todos os itens do localStorage
     };
 
 
